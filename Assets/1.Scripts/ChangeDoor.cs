@@ -9,7 +9,8 @@ public class ChangeDoor : MonoBehaviour
     [SerializeField] private GameObject m_doorDisable;
     [SerializeField] private GameObject m_doorEnable;
     [SerializeField] private Color m_colorHue = Color.white;
-    public event Action DoorChanged;
+    [SerializeField] private bool m_isOpen = true;
+    public event Action<bool> DoorChanged;
     private SpriteRenderer m_sprite;
     private Color m_startColor;
     
@@ -23,8 +24,8 @@ public class ChangeDoor : MonoBehaviour
     private void OnMouseUp()
     {
         m_sprite.color = m_startColor;
-        Debug.Log("Door closed");
-        DoorChanged?.Invoke();
+        //Debug.Log("Door closed");
+        DoorChanged?.Invoke(m_isOpen);
         m_doorEnable.SetActive(true);
         m_doorDisable.SetActive(false);
         
@@ -33,7 +34,7 @@ public class ChangeDoor : MonoBehaviour
     private void OnMouseDown()
     {
 
-        Debug.Log("selectButton");
+        //Debug.Log("selectButton");
         m_sprite.color = m_colorHue;
 
     }

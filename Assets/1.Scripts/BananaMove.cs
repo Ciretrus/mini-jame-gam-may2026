@@ -14,8 +14,9 @@ public class BananaMove : MonoBehaviour
     //private HingeJoint2D m_joint;
     private Rigidbody2D m_rb;
     private bool m_isInMicrowave;
+    private bool m_connected;
     public bool canMove;
-    public event Action InMicrowave;
+    public event Action<bool,BananaMove> InMicrowave;
     void Start()
     {
         canMove = true;
@@ -27,11 +28,15 @@ public class BananaMove : MonoBehaviour
     {
         if (canMove)
         {
+            if (m_connected == true)
+            {
+                Microwave.m_isFull = false;
+            }
             m_rb.bodyType = RigidbodyType2D.Dynamic;
+            m_connected = false;
             Vector2 mousePos = m_camera.ScreenToWorldPoint(Input.mousePosition);
             Vector3 direction = mousePos - m_rb.position;
             m_rb.velocity = direction * m_followSpeed;
-            
         }
         
         //m_joint.enabled = true;
@@ -45,14 +50,15 @@ public class BananaMove : MonoBehaviour
         //m_joint.enabled = false;
         if (m_isInMicrowave)
         {
-            m_rb.bodyType = RigidbodyType2D.Static;
-            Vector3 newPos = m_innerMicrowavePosition.position;
-            transform.DOMove(new Vector3(newPos.x,newPos.y,transform.position.z), m_timeTween);
-            InMicrowave?.Invoke();
-        }
-        else
-        {
-            m_rb.bodyType = RigidbodyType2D.Dynamic;
+            if (!Microwave.m_isFull)
+            {
+                m_rb.bodyType = RigidbodyType2D.Static;
+                Vector3 newPos = m_innerMicrowavePosition.position;
+                transform.DOMove(new Vector3(newPos.x, newPos.y, transform.position.z), m_timeTween);
+                m_connected = true;
+                InMicrowave?.Invoke(m_connected, this);
+                Microwave.m_isFull = true;
+            }
         }
     }
 
@@ -69,7 +75,7 @@ public class BananaMove : MonoBehaviour
     {
         if (other.CompareTag("InnerMicrowave"))
         {
-            Debug.Log("exit MW");
+            //Debug.Log("exit MW");
             m_isInMicrowave = false;
         }
     }
