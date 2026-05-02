@@ -24,7 +24,7 @@ public class SellBanana : MonoBehaviour
                 BananaSettings bananaSettings = collision.GetComponent<BananaSettings>();
                 float freshness = bananaSettings.GetFreshness();
                 int bananaType = bananaSettings.GetBananaType();
-                bananaMove.transform.DOMove(m_sellPoint.position, m_tweenTime).SetEase(Ease.OutBack).OnComplete(() =>
+                bananaMove.transform.DOMove(m_sellPoint.position, m_tweenTime).OnComplete(() =>
                 {
                     Destroy(bananaMove.gameObject);
                     OnSell?.Invoke(freshness,bananaType);

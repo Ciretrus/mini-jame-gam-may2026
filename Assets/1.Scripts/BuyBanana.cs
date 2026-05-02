@@ -9,6 +9,8 @@ public class BuyBanana : MonoBehaviour
     [SerializeField] private Transform m_cloud;
     [SerializeField] private float m_cloudMaxSize;
     [SerializeField] private float m_cloudMinSize;
+    [SerializeField] private float m_bananaMaxSize = 0.85f;
+    [SerializeField] private float m_bananaMinSize = 0f;
     [SerializeField] private float m_tweenTime1 = 0.4f;
     [SerializeField] private float m_tweenTime2 = 0.3f;
     [SerializeField] private GameObject[] m_bananas;
@@ -21,13 +23,18 @@ public class BuyBanana : MonoBehaviour
     private float m_balance = 0f;
     private GameObject m_currentbanana;
 
-    private void Awake()
+    private void OnEnable()
     {
         m_seller.OnSell += Buy;
+    }
+    private void OnDisnable()
+    {
+        m_seller.OnSell -= Buy;
     }
 
     private void Start()
     {
+        ShowBanana();
         ShowAnimation();
     }
 
@@ -50,13 +57,13 @@ public class BuyBanana : MonoBehaviour
     {
         m_cloud.DOKill();
         if (m_currentbanana != null) {
-            m_currentbanana.transform.DOScale(Vector3.zero, m_tweenTime1).SetEase(Ease.InBack);
-                m_cloud.DOScale(Vector3.zero, m_tweenTime1).SetEase(Ease.InBack).OnComplete(() =>
+            m_currentbanana.transform.DOScale(Vector3.one * m_bananaMinSize, m_tweenTime1).SetEase(Ease.InBack);
+                m_cloud.DOScale(Vector3.one*m_cloudMinSize, m_tweenTime1).SetEase(Ease.InBack).OnComplete(() =>
                 {
                     m_cloud.DOScale(Vector3.one * m_cloudMaxSize, m_tweenTime1).SetEase(Ease.InBack).OnComplete(() =>
                 {
                     ShowBanana();
-                    m_currentbanana.transform.DOScale(Vector3.one, m_tweenTime2).SetEase(Ease.InBack);
+                    m_currentbanana.transform.DOScale(Vector3.one * m_bananaMaxSize, m_tweenTime2).SetEase(Ease.InBack);
                 });
             });
         }
@@ -72,6 +79,7 @@ public class BuyBanana : MonoBehaviour
         float coast = startCoast - Mathf.Abs(freshness-m_freshness)* m_punishment;
         m_balance += coast;
         OnBalanceChange?.Invoke();
+        Debug.Log(m_balance);
         ShowAnimation();
 
     }
