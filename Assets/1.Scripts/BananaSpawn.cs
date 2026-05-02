@@ -92,7 +92,7 @@ public class BananaSpawn : MonoBehaviour
 
 
     }
-    public void BananaShare(bool inMicrowave, BananaMove bananaMove)
+    private void BananaShare(bool inMicrowave, BananaMove bananaMove)
     {
         Debug.Log("microwave"+inMicrowave);
         if (inMicrowave)
@@ -104,5 +104,15 @@ public class BananaSpawn : MonoBehaviour
         {
             m_microwave.SetBanana(null,null);
         }
+    }
+
+    public void Restart()
+    {
+        foreach (var obj in m_activeBananas)
+        {
+            Destroy(obj);
+        }
+        m_bananaCounter = 0;
+        m_canPush = true;
     }
 }

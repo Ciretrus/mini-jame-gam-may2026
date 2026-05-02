@@ -58,6 +58,11 @@ public class Microwave : MonoBehaviour
         return m_bananaMove;
     }
 
-
+    public void Restart()
+    {
+        m_isFull = false;
+        m_bananaSettings = null;
+        m_bananaMove = null;
+    }
 
 }

@@ -58,7 +58,7 @@ public class BuyBanana : MonoBehaviour
         m_cloud.DOKill();
         if (m_currentbanana != null) {
             m_currentbanana.transform.DOKill();
-            m_currentbanana.transform.DOScale(Vector3.one * m_bananaMinSize, m_tweenTime1).SetEase(Ease.InBack);
+            m_currentbanana.transform.DOScale(Vector3.one * m_bananaMinSize, m_tweenTime2).SetEase(Ease.InBack);
                 m_cloud.DOScale(Vector3.one*m_cloudMinSize, m_tweenTime1).SetEase(Ease.InBack).OnComplete(() =>
                 {
                     m_cloud.DOScale(Vector3.one * m_cloudMaxSize, m_tweenTime1).SetEase(Ease.InBack).OnComplete(() =>
@@ -72,7 +72,7 @@ public class BuyBanana : MonoBehaviour
     }
     public void Restart()
     {
-        HideAnimation();
+        ShowAnimation();
         m_balance = 0f;
     }
 
