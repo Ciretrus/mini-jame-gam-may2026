@@ -11,12 +11,15 @@ public class BananaMove : MonoBehaviour
     public Camera m_camera;
     public Transform m_innerMicrowavePosition;
     public float m_timeTween = 0.5f;
+    public Microwave m_microwave;
     //private HingeJoint2D m_joint;
     private Rigidbody2D m_rb;
     private bool m_isInMicrowave;
     private bool m_connected;
     public bool canMove;
+    public bool isDrag;
     public event Action<bool,BananaMove> InMicrowave;
+    public event Action<BananaMove> OnDestroyed;
     void Start()
     {
         canMove = true;
@@ -26,11 +29,13 @@ public class BananaMove : MonoBehaviour
 
     private void OnMouseDrag()
     {
+        
         if (canMove)
         {
+            isDrag = true;
             if (m_connected == true)
             {
-                Microwave.m_isFull = false;
+                m_microwave.m_isFull = false;
             }
             m_rb.bodyType = RigidbodyType2D.Dynamic;
             m_connected = false;
@@ -47,17 +52,18 @@ public class BananaMove : MonoBehaviour
     }
     private void OnMouseUp()
     {
+        isDrag = false;
         //m_joint.enabled = false;
         if (m_isInMicrowave)
         {
-            if (!Microwave.m_isFull)
+            if (!m_microwave.m_isFull)
             {
                 m_rb.bodyType = RigidbodyType2D.Static;
                 Vector3 newPos = m_innerMicrowavePosition.position;
-                transform.DOMove(new Vector3(newPos.x, newPos.y, transform.position.z), m_timeTween);
+                transform.DOMove(new Vector3(newPos.x, newPos.y, transform.position.z), m_timeTween).SetEase(Ease.OutExpo);
                 m_connected = true;
                 InMicrowave?.Invoke(m_connected, this);
-                Microwave.m_isFull = true;
+                m_microwave.m_isFull = true;
             }
         }
     }
@@ -77,6 +83,11 @@ public class BananaMove : MonoBehaviour
         {
             //Debug.Log("exit MW");
             m_isInMicrowave = false;
+            InMicrowave?.Invoke(false, this);
         }
+    }
+    private void OnDestroy()
+    {
+        OnDestroyed?.Invoke(this);
     }
 }

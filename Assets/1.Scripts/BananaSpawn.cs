@@ -12,6 +12,8 @@ public class BananaSpawn : MonoBehaviour
     [SerializeField] private Camera m_camera;
     [SerializeField] private Transform m_innerMicrowavePosition;
     [SerializeField] private int m_spawnCount = 5;
+    [SerializeField] private ParticleSystem m_greenParticle;
+    [SerializeField] private ParticleSystem m_brownParticle;
 
     [SerializeField] private Transform m_truba;
     [SerializeField] private Vector3 m_trubaOffset;
@@ -20,15 +22,24 @@ public class BananaSpawn : MonoBehaviour
     [SerializeField] private float m_timebuttonTween = 0.5f;
 
     private List<GameObject> m_activeBananas = new List<GameObject>();
+    private int m_bananaCounter = 0;
     private bool m_canPush = true;
 
-    void OnDisable()
+    //void OnDisable()
+    //{
+    //    foreach (var obj in m_activeBananas)
+    //    {
+    //        var bananaMove = obj.GetComponent<BananaMove>();
+    //        bananaMove.InMicrowave -= BananaShare;
+    //    }    
+    //}
+
+    void BananaDestroyed(BananaMove banana)
     {
-        foreach (var obj in m_activeBananas)
-        {
-            var bananaMove = obj.GetComponent<BananaMove>();
-            bananaMove.InMicrowave -= BananaShare;
-        }    
+        m_activeBananas.Remove(banana.gameObject);
+        banana.OnDestroyed -= BananaDestroyed;
+        banana.InMicrowave -= BananaShare;
+        m_bananaCounter --;
     }
 
     private void OnMouseDown()
@@ -67,19 +78,31 @@ public class BananaSpawn : MonoBehaviour
         BananaSettings bananaSettings = newBanana.GetComponent<BananaSettings>();
 
         bananaMove.m_camera = Camera.main;
+        bananaMove.m_microwave = m_microwave;
         bananaMove.m_innerMicrowavePosition = m_innerMicrowavePosition;
         bananaMove.InMicrowave += BananaShare;
-
+        bananaMove.OnDestroyed += BananaDestroyed;
         float randomFreshness = Random.Range(0, 2f);
+
         Debug.Log(randomFreshness);
         bananaSettings.ChangeFreshness(randomFreshness);
+        bananaSettings.m_brownParticle = m_brownParticle;
+        bananaSettings.m_greenParticle = m_greenParticle;
         m_activeBananas.Add(newBanana);
-        
+
+
     }
     public void BananaShare(bool inMicrowave, BananaMove bananaMove)
     {
         Debug.Log("microwave"+inMicrowave);
-        var bananaSettings = bananaMove.GetComponent<BananaSettings>();
-        m_microwave.SetBanana(bananaMove, bananaSettings);
+        if (inMicrowave)
+        {
+            var bananaSettings = bananaMove.GetComponent<BananaSettings>();
+            m_microwave.SetBanana(bananaMove, bananaSettings);
+        }
+        else
+        {
+            m_microwave.SetBanana(null,null);
+        }
     }
 }

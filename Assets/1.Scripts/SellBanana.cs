@@ -1,0 +1,36 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using DG.Tweening;
+
+public class SellBanana : MonoBehaviour
+{
+
+    [SerializeField] private Transform m_sellPoint;
+    [SerializeField] private float m_tweenTime;
+    private bool m_started = false;
+    public event Action<float> OnSell;
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision !=null && collision.CompareTag("Banana"))
+        {
+            BananaMove bananaMove = collision.GetComponent<BananaMove>();
+            if (bananaMove != null && !bananaMove.isDrag && !m_started) 
+            {
+                m_started = true;
+                bananaMove.canMove = false;
+                BananaSettings bananaSettings = collision.GetComponent<BananaSettings>();
+                float freshness = bananaSettings.GetFreshness();
+                bananaMove.transform.DOMove(m_sellPoint.position, m_tweenTime).SetEase(Ease.OutBack).OnComplete(() =>
+                {
+                    Destroy(bananaMove.gameObject);
+                    OnSell?.Invoke(freshness);
+                    m_started = false;
+                });
+            }
+
+        }
+    }
+}
