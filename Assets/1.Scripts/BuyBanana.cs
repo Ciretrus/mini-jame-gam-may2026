@@ -17,7 +17,7 @@ public class BuyBanana : MonoBehaviour
     [SerializeField] private SellBanana m_seller;
     [SerializeField] private Transform m_spawnPoint;
     [SerializeField] private float m_punishment = 100f;
-    public event Action OnBalanceChange;
+    public event Action<float> OnBalanceChange;
     private float m_freshness = 0f;
     private int m_bananaType = 0; 
     private float m_balance = 0f;
@@ -27,7 +27,7 @@ public class BuyBanana : MonoBehaviour
     {
         m_seller.OnSell += Buy;
     }
-    private void OnDisnable()
+    private void OnDisable()
     {
         m_seller.OnSell -= Buy;
     }
@@ -57,6 +57,7 @@ public class BuyBanana : MonoBehaviour
     {
         m_cloud.DOKill();
         if (m_currentbanana != null) {
+            m_currentbanana.transform.DOKill();
             m_currentbanana.transform.DOScale(Vector3.one * m_bananaMinSize, m_tweenTime1).SetEase(Ease.InBack);
                 m_cloud.DOScale(Vector3.one*m_cloudMinSize, m_tweenTime1).SetEase(Ease.InBack).OnComplete(() =>
                 {
@@ -69,6 +70,21 @@ public class BuyBanana : MonoBehaviour
         }
 
     }
+    public void Restart()
+    {
+        HideAnimation();
+        m_balance = 0f;
+    }
+
+    private void HideAnimation()
+    {
+        m_cloud.DOKill();
+        if (m_currentbanana != null)
+        {
+            m_currentbanana.transform.DOScale(Vector3.one * m_bananaMinSize, m_tweenTime1).SetEase(Ease.InBack);
+            m_cloud.DOScale(Vector3.one * m_cloudMinSize, m_tweenTime1).SetEase(Ease.InBack);
+        }
+    }
 
     private void Buy(float freshness,int bananaType)
     {
@@ -78,7 +94,7 @@ public class BuyBanana : MonoBehaviour
             startCoast = 50f;
         float coast = startCoast - Mathf.Abs(freshness-m_freshness)* m_punishment;
         m_balance += coast;
-        OnBalanceChange?.Invoke();
+        OnBalanceChange?.Invoke(m_balance);
         Debug.Log(m_balance);
         ShowAnimation();
 
