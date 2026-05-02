@@ -15,6 +15,9 @@ public class BananaSettings : MonoBehaviour
 
     [SerializeField] private float m_greenBoomSize = 1.25f;
     [SerializeField] private float m_brownBoomSize = 0.1f;
+
+    [SerializeField] private int m_bananaType = 0;
+
     public event Action<BananaSettings> OnDestroyed;
     public ParticleSystem m_greenParticle;
     public ParticleSystem m_brownParticle;
@@ -75,6 +78,11 @@ public class BananaSettings : MonoBehaviour
     public float GetFreshness()
     {
         return m_freshness;
+    }
+
+    public int GetBananaType()
+    {
+        return m_bananaType;
     }
     private void OnDestroy()
     {

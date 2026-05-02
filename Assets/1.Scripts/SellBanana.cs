@@ -10,7 +10,7 @@ public class SellBanana : MonoBehaviour
     [SerializeField] private Transform m_sellPoint;
     [SerializeField] private float m_tweenTime;
     private bool m_started = false;
-    public event Action<float> OnSell;
+    public event Action<float,int> OnSell;
 
     private void OnTriggerStay2D(Collider2D collision)
     {
@@ -23,10 +23,11 @@ public class SellBanana : MonoBehaviour
                 bananaMove.canMove = false;
                 BananaSettings bananaSettings = collision.GetComponent<BananaSettings>();
                 float freshness = bananaSettings.GetFreshness();
+                int bananaType = bananaSettings.GetBananaType();
                 bananaMove.transform.DOMove(m_sellPoint.position, m_tweenTime).SetEase(Ease.OutBack).OnComplete(() =>
                 {
                     Destroy(bananaMove.gameObject);
-                    OnSell?.Invoke(freshness);
+                    OnSell?.Invoke(freshness,bananaType);
                     m_started = false;
                 });
             }
