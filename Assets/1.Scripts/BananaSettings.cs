@@ -17,6 +17,8 @@ public class BananaSettings : MonoBehaviour
     [SerializeField] private float m_brownBoomSize = 0.1f;
 
     [SerializeField] private int m_bananaType = 0;
+    public AudioSource m_brownBananaBoom;
+    public AudioSource m_greenBananaBoom;
 
     public event Action<BananaSettings> OnDestroyed;
     public ParticleSystem m_greenParticle;
@@ -62,6 +64,7 @@ public class BananaSettings : MonoBehaviour
         Vector3 newScale = transform.localScale* m_greenBoomSize;
         transform.DOScale(newScale, m_tweenTime).SetEase(Ease.InExpo).OnComplete(() =>
         {
+            m_greenBananaBoom.Play();
             m_greenParticle.Play();
             Destroy(gameObject);
         });
@@ -71,6 +74,7 @@ public class BananaSettings : MonoBehaviour
         Vector3 newScale = transform.localScale * m_brownBoomSize;
         transform.DOScale(newScale, m_tweenTime).SetEase(Ease.OutExpo).OnComplete(() =>
         {
+            m_brownBananaBoom.Play();
             m_brownParticle.Play();
             Destroy(gameObject);
         });

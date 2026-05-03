@@ -9,6 +9,7 @@ public class TimeButtons : MonoBehaviour
     [SerializeField] private float m_rotateSpeed = 10f;
     [SerializeField] private float m_timeSpeed = 1f;
     [SerializeField] private Color m_colorHue = Color.white;
+    [SerializeField] private AudioSource m_audioSource;
     private SpriteRenderer m_sprite;
     private Color m_startColor;
 
@@ -18,6 +19,13 @@ public class TimeButtons : MonoBehaviour
         m_startColor = m_sprite.color;
     }
 
+    private void OnMouseDown()
+    {
+        if (m_microwave.m_isClosed)
+        {
+            m_audioSource.Play();
+        }
+    }
     private void OnMouseDrag()
     {
         BananaSettings bananaSettings = m_microwave.GetBananaSettings();
@@ -41,6 +49,7 @@ public class TimeButtons : MonoBehaviour
     }
     private void OnMouseUp()
     {
+        m_audioSource.Stop();
         m_light.SetActive(false);
         m_sprite.color = m_startColor;
         

@@ -10,6 +10,7 @@ public class ChangeDoor : MonoBehaviour
     [SerializeField] private GameObject m_doorEnable;
     [SerializeField] private Color m_colorHue = Color.white;
     [SerializeField] private bool m_isClosed = true;
+    [SerializeField] private AudioSource m_source;
     public event Action<bool> DoorChanged;
     private SpriteRenderer m_sprite;
     private Color m_startColor;
@@ -26,6 +27,8 @@ public class ChangeDoor : MonoBehaviour
         m_sprite.color = m_startColor;
         Debug.Log("Door"+ m_isClosed);
         DoorChanged?.Invoke(m_isClosed);
+        if (m_doorEnable.activeSelf == false)
+            m_source.Play();
         m_doorEnable.SetActive(true);
         m_doorDisable.SetActive(false);
         

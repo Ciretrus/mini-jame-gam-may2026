@@ -35,7 +35,7 @@ public class BuyBanana : MonoBehaviour
     private void Start()
     {
         ShowBanana();
-        ShowAnimation();
+        //ShowAnimation();
     }
 
     private void ShowBanana()
@@ -76,7 +76,7 @@ public class BuyBanana : MonoBehaviour
         m_balance = 0f;
     }
 
-    private void HideAnimation()
+    public void HideAnimation()
     {
         m_cloud.DOKill();
         if (m_currentbanana != null)

@@ -20,10 +20,13 @@ public class BananaSpawn : MonoBehaviour
     [SerializeField] private Vector3 m_buttonOffset;
     [SerializeField] private float m_timeTrubaTween = 0.5f;
     [SerializeField] private float m_timebuttonTween = 0.5f;
+    [SerializeField] private AudioSource m_brownBananaBoom;
+    [SerializeField] private AudioSource m_greenBananaBoom;
+    [SerializeField] private AudioSource m_audioSource;
 
     private List<GameObject> m_activeBananas = new List<GameObject>();
     private int m_bananaCounter = 0;
-    private bool m_canPush = true;
+    public bool m_canPush = true;
 
     //void OnDisable()
     //{
@@ -45,8 +48,8 @@ public class BananaSpawn : MonoBehaviour
     private void OnMouseDown()
     {
         if (m_activeBananas.Count < m_spawnCount && m_canPush)
-        { 
-
+        {
+            m_audioSource.Play();
             m_canPush = false;
             transform.DOMove(transform.position - m_buttonOffset, m_timebuttonTween).SetEase(Ease.OutBack).OnComplete(() => {
                 
@@ -88,6 +91,8 @@ public class BananaSpawn : MonoBehaviour
         bananaSettings.ChangeFreshness(randomFreshness);
         bananaSettings.m_brownParticle = m_brownParticle;
         bananaSettings.m_greenParticle = m_greenParticle;
+        bananaSettings.m_brownBananaBoom = m_brownBananaBoom;
+        bananaSettings.m_greenBananaBoom = m_greenBananaBoom;
         m_activeBananas.Add(newBanana);
 
 

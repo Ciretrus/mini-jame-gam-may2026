@@ -20,6 +20,7 @@ GameObject:
   - component: {fileID: 1369730167223857175}
   - component: {fileID: 7254643315053488901}
   - component: {fileID: 323424705821541022}
+  - component: {fileID: 7729538597426879428}
   m_Layer: 0
   m_Name: banan_0 2
   m_TagString: Banana
@@ -213,11 +214,13 @@ MonoBehaviour:
     m_NumColorKeys: 2
     m_NumAlphaKeys: 2
   m_tweenTime: 0.3
-  m_greenBoomFreshness: -0.5
-  m_brownBoomFreshness: 2.5
+  m_greenBoomFreshness: -0.25
+  m_brownBoomFreshness: 2.25
   m_greenBoomSize: 1.1
   m_brownBoomSize: 0.1
   m_bananaType: 3
+  m_brownBananaBoom: {fileID: 0}
+  m_greenBananaBoom: {fileID: 0}
   m_greenParticle: {fileID: 0}
   m_brownParticle: {fileID: 0}
 --- !u!58 &672879408390068852
@@ -472,3 +475,40 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: -0.1268394, y: -1.3281875}
   m_Radius: 0.18090606
+--- !u!70 &7729538597426879428
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2056603464171610043}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: -0.21183491, y: -0.17838705}
+  m_Size: {x: 0.6706276, y: 2.8335745}
+  m_Direction: 0

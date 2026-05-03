@@ -11,6 +11,7 @@ public class ShowBalance : MonoBehaviour
     [SerializeField] private BuyBanana m_buyBanana;
     [SerializeField] private Color m_negativeBalanceColor;
     [SerializeField] private float m_tweenTime;
+    [SerializeField] private AudioSource m_audioSource;
     private int m_currentBalance = 0;
     private Color m_startColor;
 
@@ -28,6 +29,8 @@ public class ShowBalance : MonoBehaviour
     }
     private void ChangeBalance(float balance)
     {
+        if (m_currentBalance == balance) return;
+        m_audioSource.Play();
         if (balance < 0)
             m_balance.color = m_negativeBalanceColor;
         else
